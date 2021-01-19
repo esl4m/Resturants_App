@@ -32,12 +32,8 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="#">Resturants List</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
             </div>
         </nav>
-
         <header style="min-height: 55px;"></header>
 
         <div class="relative items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0" style="padding-bottom: 5%;">
@@ -60,21 +56,28 @@
                             </fieldset>
                         </div>
                     </div>
-                        
+                    {{-- {{ dd($all_resturants) }} --}}
+                    <div class="row mt-8">
+                        <div class="col-3" id="name">Name</div>
+                        <div class="col-6" id="rate">Rating</div>
+                        <div class="col-1" id="status">Status</div>
+                        <div class="col-1"></div>
+                    </div>
                     @foreach ($all_resturants as $res)
                         <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                             <div class="row">
-                                <div class="col-8">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 text-lg leading-7 font-semibold">
-                                            {{ $res['name'] }}
-                                        </div>
+                                <div class="col-3">
+                                    <div class="ml-4 text-lg leading-7 font-semibold">
+                                        {{ $res['name'] }}
                                     </div>
+                                </div>
+                                <div class="col-6">
+                                    {{ $res['sortingValues']['ratingAverage'] }}
                                 </div>
                                 <div class="col-2">
                                     {{ $res['status'] }}
                                 </div>
-                                <div class="col-2">
+                                <div class="col-1">
                                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
                                         <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
