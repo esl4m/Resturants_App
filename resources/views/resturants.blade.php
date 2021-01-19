@@ -58,23 +58,43 @@
                     </div>
                     {{-- {{ dd($all_resturants) }} --}}
                     <div class="row mt-8">
-                        <div class="col-3" id="name">Name</div>
-                        <div class="col-6" id="rate">Rating</div>
+                        <div class="col-4" id="name">Name</div>
+                        <div class="col-1" id="ratingAverage">Rating</div>
+                        <div class="col-1" id="bestMatch">Matching</div>
+                        <div class="col-1" id="newest">Newest</div>
+                        <div class="col-1" id="distance">distance</div>
+                        <div class="col-1" id="deliveryCosts">Delivery Costs</div>
+                        <div class="col-1" id="minCost">Min Cost</div>
                         <div class="col-1" id="status">Status</div>
                         <div class="col-1"></div>
                     </div>
                     @foreach ($all_resturants as $res)
                         <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-4">
                                     <div class="ml-4 text-lg leading-7 font-semibold">
                                         {{ $res['name'] }}
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-1">
                                     {{ $res['sortingValues']['ratingAverage'] }}
                                 </div>
-                                <div class="col-2">
+                                <div class="col-1">
+                                    {{ $res['sortingValues']['bestMatch'] }}
+                                </div>
+                                <div class="col-1">
+                                    {{ $res['sortingValues']['newest'] }}
+                                </div>
+                                <div class="col-1">
+                                    {{ $res['sortingValues']['distance'] }}
+                                </div>
+                                <div class="col-1">
+                                    {{ $res['sortingValues']['deliveryCosts'] }}
+                                </div>
+                                <div class="col-1">
+                                    {{ $res['sortingValues']['minCost'] }}
+                                </div>
+                                <div class="col-1">
                                     {{ $res['status'] }}
                                 </div>
                                 <div class="col-1">
