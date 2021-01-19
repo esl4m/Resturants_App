@@ -31,7 +31,7 @@
     <body class="antialiased">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">Resturants List</a>
+                <a class="navbar-brand" href="{{ route('resturants') }}">Resturants List</a>
             </div>
         </nav>
         <header style="min-height: 55px;"></header>
@@ -44,7 +44,8 @@
                         <div class="col-9"></div>
                         <div class="col-3" style="text-align: right;">
                             <fieldset class="form-group">
-                                <select class="form-control" id="sort">
+                                <select class="form-control" name="sort_value" id="sort_value">
+                                    <option>Select Value</option>
                                     <option value="bestMatch">Best Match</option>
                                     <option value="newest">Newest</option>
                                     <option value="ratingAverage">Rating Average</option>
@@ -117,4 +118,25 @@
             </div>
         </div>
     </body>
+    <script>
+        $(document).ready(function(){
+            $('#sort_value').change(function () {
+                var sort_value = $(this).val();
+
+                if(sort_value !== ''){
+                    $.ajax({
+                        url : `/resturants/sorting/${sort_value}`,
+                        type: "GET",
+                        success:function(response){
+                            // console.log(response);
+                            window.open(`/resturants/sorting/${sort_value}`, "_self");
+                        },
+                        error: function(){
+                            console.log('Ajax Failed')
+                        }
+                    });
+                }
+            });
+        })
+    </script>
 </html>

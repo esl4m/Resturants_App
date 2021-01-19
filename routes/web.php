@@ -18,4 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/resturants', [ResturantController::class, 'index' ]);
+Route::get('/resturants', [ResturantController::class, 'index' ])->name('resturants');
+Route::get('/resturants/sorting/{keyword}', [ResturantController::class, 'sorting' ])->name('sorting');

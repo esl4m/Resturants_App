@@ -19,7 +19,7 @@ class ResturantController extends Controller
             $this->my_resturants = config('resturants_obj.restaurants');
         }
         else {
-            return dd('error, or file not found');
+            abort(404, 'Not Found');
         }
     }
 
@@ -35,6 +35,23 @@ class ResturantController extends Controller
             $this->resturants = $this->sortingList($this->my_resturants, 'open', 'minCost');
 
             return view('resturants', ['all_resturants' => $this->resturants]);
+        }
+    }
+
+    /**
+     * Called function Sorting from incoming resturant request
+     * 
+     * @param  $keyword
+     * @return \Illuminate\Http\Response
+     */
+    public function sorting($keyword){
+        if ($keyword) {
+            // Sort the base resturant by the new keyword
+            $new_sorted_resturants = $this->sortingList($this->my_resturants, '', $keyword);
+            return view('resturants', ['all_resturants' => $new_sorted_resturants]);
+        }
+        else {
+            abort(404, 'Not Found');
         }
     }
 
