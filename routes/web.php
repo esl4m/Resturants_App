@@ -14,9 +14,7 @@ use App\Http\Controllers\ResturantController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/resturants', [ResturantController::class, 'index' ])->name('resturants');
+Route::get('/', [ResturantController::class, 'index' ])->name('resturants');
 Route::post('/sorting', [ResturantController::class, 'sorting'])->name('sorting');
+Route::post('/fav', [ResturantController::class, 'addFav'])->name('favorite');
+Route::delete('/fav', [ResturantController::class, 'removeFav'])->name('unfavorite');
