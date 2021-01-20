@@ -8,6 +8,7 @@ use Cookie;
 class ResturantController extends Controller
 {
     public $resturants = [];
+    public $myFavorites = [];
     /**
      * Instantiate a new controller Resturant.
      *
@@ -66,7 +67,21 @@ class ResturantController extends Controller
      */
     public function addFav(Request $request)
     {
-        //
+        if($request->input('fav_name')) {
+            $newFav = $request->input('fav_name');
+            // Check if not in myFav array
+            
+            if (!in_array($newFav, $this->myFavorites)){
+                array_push($this->myFavorites, $newFav);
+
+                // TODO: .. Adds to browser / localstorage / cookies
+
+                return response()->json(['errors' => null, 'data' => $newFav." added to your favorites!", 'status' => 'success'], 200);
+            }
+        }
+        else {
+            abort(404, 'Not Found');
+        }
     }
 
     /**
@@ -77,7 +92,17 @@ class ResturantController extends Controller
      */
     public function removeFav(Request $request)
     {
-        //
+        if($request->input('fav_name')) {
+            $removeFav = $request->input('fav_name');
+            if (in_array($removeFav , $this->myFavorites)) {
+                array_splice($this->myFavorites, $removeFav, 1);
+
+                return response()->json(['errors' => null, 'data' => $removeFav." removed from favorites!", 'status' => 'success'], 200);
+            }
+        }
+        else {
+            abort(404, 'Not Found');
+        }
     }
 
     /**

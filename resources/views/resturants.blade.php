@@ -85,12 +85,14 @@
                                     <th>Delivery Costs</th>
                                     <th>Min Cost</th>
                                     <th>Status</th>
+
+                                    <th>Fav</th>
                                 </tr>
                             </thead>
                             <tbody id="fbody">
                             @foreach ($all_resturants as $res)
-                                <tr>
-                                    <td>{{ $res['name'] }}</td>
+                                <tr class="data">
+                                    <td class="name">{{ $res['name'] }}</td>
                                     <td>{{ $res['sortingValues']['ratingAverage'] }}</td>
                                     <td>{{ $res['sortingValues']['bestMatch'] }}</td>
                                     <td>{{ $res['sortingValues']['newest'] }}</td>
@@ -100,6 +102,9 @@
                                     <td>{{ $res['sortingValues']['deliveryCosts'] }}</td>
                                     <td>{{ $res['sortingValues']['minCost'] }}</td>
                                     <td>{{ $res['status'] }}</td>
+                                    <td id="fav_value">
+                                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -150,6 +155,44 @@
                         },
                         error: function(){
                             console.log('Ajax Failed')
+                        }
+                    });
+                }
+            });
+
+            // Add Favourite Resturant
+            $('.data').click(function () {
+                var fav_value = $(this).find('td.name').text();
+
+                if(sort_value !== '') {
+                    $.ajax({
+                        url : "{{ route('favorite') }}",
+                        type: "POST",
+                        data : 'fav_name='+fav_value,
+                        success:function(response) {
+                            console.log('Fav .. added !', response)
+                        },
+                        error: function(error) {
+                            console.log(error)
+                        }
+                    });
+                }
+            });
+
+            // Remove Fav Resturant
+            $('.data').click(function () {
+                var fav_value = $(this).find('td.name').text();
+
+                if(sort_value !== '') {
+                    $.ajax({
+                        url : "{{ route('unfavorite') }}",
+                        type: "delete",
+                        data : 'fav_name='+fav_value,
+                        success:function(response) {
+                            console.log('Fav .. Removed !', response)
+                        },
+                        error: function(error) {
+                            console.log(error)
                         }
                     });
                 }
