@@ -11,15 +11,21 @@ List restaurants from json file , with some Sorting & Favourites functionalities
 
 - To check the status of the running containers, run the following command `docker ps -a`
 - To get inside the docker container using this: `docker exec -u 0 -it Container_ID bash`
-......
+
+...
 
 ### To open the app:
 - App running on your localhost:
 `http://localhost:80/`
 - `If app not running, execute the (check docker status) mentioned before`
 
+..
+
 ### Tests:
-- To be added ..
+- To be added 
+
+..
+
 
 ## App is using:
 - Laravel & PHP
