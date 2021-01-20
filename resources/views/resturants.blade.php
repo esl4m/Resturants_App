@@ -27,6 +27,18 @@
                 font-family: 'Nunito';
             }
         </style>
+
+        {{-- Adds CSRF Header for sending request via javascript --}}
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
+        {{-- Ends --}}
+
     </head>
     <body class="antialiased">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -58,54 +70,41 @@
                         </div>
                     </div>
                     {{-- {{ dd($all_resturants) }} --}}
-                    <div class="row mt-8">
-                        <div class="col-4" id="name">Name</div>
-                        <div class="col-1" id="ratingAverage">Rating</div>
-                        <div class="col-1" id="bestMatch">Matching</div>
-                        <div class="col-1" id="newest">Newest</div>
-                        <div class="col-1" id="distance">distance</div>
-                        <div class="col-1" id="deliveryCosts">Delivery Costs</div>
-                        <div class="col-1" id="minCost">Min Cost</div>
-                        <div class="col-1" id="status">Status</div>
-                        <div class="col-1"></div>
+                    
+                    <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+                        <table class="table table-dark" id="myTable">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                    <th>Matching</th>
+                                    <th>Newest</th>
+                                    <th>Distance</th>
+                                    <th>Popularity</th>
+                                    <th>Avg. Product Price</th>
+                                    <th>Delivery Costs</th>
+                                    <th>Min Cost</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fbody">
+                            @foreach ($all_resturants as $res)
+                                <tr>
+                                    <td>{{ $res['name'] }}</td>
+                                    <td>{{ $res['sortingValues']['ratingAverage'] }}</td>
+                                    <td>{{ $res['sortingValues']['bestMatch'] }}</td>
+                                    <td>{{ $res['sortingValues']['newest'] }}</td>
+                                    <td>{{ $res['sortingValues']['distance'] }}</td>
+                                    <td>{{ $res['sortingValues']['popularity'] }}</td>
+                                    <td>{{ $res['sortingValues']['averageProductPrice'] }}</td>
+                                    <td>{{ $res['sortingValues']['deliveryCosts'] }}</td>
+                                    <td>{{ $res['sortingValues']['minCost'] }}</td>
+                                    <td>{{ $res['status'] }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    @foreach ($all_resturants as $res)
-                        <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="ml-4 text-lg leading-7 font-semibold">
-                                        {{ $res['name'] }}
-                                    </div>
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['ratingAverage'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['bestMatch'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['newest'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['distance'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['deliveryCosts'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['sortingValues']['minCost'] }}
-                                </div>
-                                <div class="col-1">
-                                    {{ $res['status'] }}
-                                </div>
-                                <div class="col-1">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
-                                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
                 @else
                     <div class="alert alert-danger">No Resturants</div>
                 @endif
@@ -125,11 +124,29 @@
 
                 if(sort_value !== ''){
                     $.ajax({
-                        url : `/resturants/sorting/${sort_value}`,
-                        type: "GET",
-                        success:function(response){
+                        url : "{{ route('sorting') }}",
+                        type: "POST",
+                        data : 'sorting='+sort_value,
+                        success:function(response)
+                        {
                             // console.log(response);
-                            window.open(`/resturants/sorting/${sort_value}`, "_self");
+                            var json = jQuery.parseJSON(JSON.stringify(response.data));
+                            var content = '';
+                            for (var i = 0; i < json.length; i++) {
+                                content += '<tr>';
+                                content += '<td>' + json[i].name + '</td>';
+                                content += '<td>' + json[i].sortingValues.ratingAverage + '</td>';
+                                content += '<td>' + json[i].sortingValues.bestMatch + '</td>';
+                                content += '<td>' + json[i].sortingValues.newest + '</td>';
+                                content += '<td>' + json[i].sortingValues.distance + '</td>';
+                                content += '<td>' + json[i].sortingValues.popularity + '</td>';
+                                content += '<td>' + json[i].sortingValues.averageProductPrice + '</td>';
+                                content += '<td>' + json[i].sortingValues.deliveryCosts + '</td>';
+                                content += '<td>' + json[i].sortingValues.minCost + '</td>';
+                                content += '<td>' + json[i].status + '</td>';
+                                content += '</tr>';
+                            }
+                            $('#myTable tbody').html(content);
                         },
                         error: function(){
                             console.log('Ajax Failed')
