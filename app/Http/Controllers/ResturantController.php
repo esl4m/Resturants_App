@@ -44,11 +44,14 @@ class ResturantController extends Controller
      * @param  $keyword
      * @return \Illuminate\Http\Response
      */
-    public function sorting($keyword){
-        if ($keyword) {
+    public function sorting(Request $request){
+        if($request->input('sorting')){
+            $sortby = $request->input('sorting');
             // Sort the base resturant by the new keyword
-            $new_sorted_resturants = $this->sortingList($this->my_resturants, '', $keyword);
-            return view('resturants', ['all_resturants' => $new_sorted_resturants]);
+            $new_sorted_resturants = $this->sortingList($this->my_resturants, '', $sortby);
+
+            // Return json to load data into ResturantTable
+            return response()->json(['errors' => null, 'data' => $new_sorted_resturants, 'status' => 'success'], 200);
         }
         else {
             abort(404, 'Not Found');
